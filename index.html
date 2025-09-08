@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: Sinh Lý Chuyển Hóa Toàn Diện (Tĩnh)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f7ff;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        .section-header {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            color: #03045e;
+            margin-bottom: 1rem;
+            padding-top: 2rem;
+        }
+        .quiz-option {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border: 2px solid #ade8f4;
+            border-radius: 0.5rem;
+            text-align: left;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #caf0f8;
+            border-color: #00b4d8;
+        }
+        .quiz-option.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+        .quiz-option.disabled {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .explanation {
+            background-color: #fffbe6;
+            border-left: 4px solid #facc15;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .deeper-explanation {
+            background-color: #e0f2fe;
+            border-left: 4px solid #0077b6;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .static-gemini-button {
+            background-image: linear-gradient(to right, #0096c7, #00b4d8);
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .static-gemini-button:hover {
+            opacity: 0.9;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-gradient-to-r from-[#03045e] to-[#0077b6] text-white text-center py-12 px-4 shadow-lg">
+        <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider">Sinh Lý Chuyển Hóa</h1>
+        <p class="text-xl md:text-2xl font-light mt-4">Từ Lý Thuyết Cơ Bản Đến Ứng Dụng Lâm Sàng</p>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="glucid" class="py-12 reveal">
+            <h2 class="section-header">I. Chuyển Hóa Glucid</h2>
+            <p class="max-w-3xl mx-auto text-lg text-center text-gray-600 mb-12">
+                Glucid là nguồn năng lượng chính, cung cấp 65-70% nhu cầu calo hàng ngày. Việc điều hòa nồng độ glucose máu là một trong những cơ chế sinh lý quan trọng nhất để đảm bảo hoạt động của não bộ và toàn cơ thể.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Điều Hòa Glucose Máu Sau Bữa Ăn</h3>
+                    <p class="text-center text-gray-600 mb-4">Sau bữa ăn, glucose máu tăng nhưng nhanh chóng được insulin đưa về mức ổn định (80-120 mg/dl) để ngăn ngừa tổn thương do đường huyết cao.</p>
+                    <div class="chart-container">
+                        <canvas id="glucoseRegulationChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Vai Trò Của Gan Trong Chuyển Hóa</h3>
+                    <p class="text-center text-gray-600 mb-4">Gan là trung tâm điều phối, chuyển hóa các loại đường khác thành glucose và dự trữ dưới dạng glycogen để cung cấp cho toàn cơ thể khi cần.</p>
+                    <div class="chart-container">
+                        <canvas id="liverRoleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="lipid" class="py-12 bg-[#e0f2fe] reveal">
+            <h2 class="section-header">II. Chuyển Hóa Lipid</h2>
+            <p class="max-w-3xl mx-auto text-lg text-center text-gray-600 mb-12">
+                Lipid là nguồn năng lượng dự trữ đậm đặc nhất (9.3 Kcal/g) và là thành phần cấu trúc thiết yếu. Tuy nhiên, sự mất cân bằng trong vận chuyển lipid là nguyên nhân chính gây ra bệnh xơ vữa động mạch.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Các Loại Lipoprotein Vận Chuyển Cholesterol</h3>
+                    <p class="text-center text-gray-600 mb-4">HDL ("tốt") vận chuyển cholesterol về gan, trong khi nồng độ LDL ("xấu") cao dẫn đến lắng đọng cholesterol ở thành mạch, gây xơ vữa.</p>
+                    <div class="chart-container">
+                        <canvas id="lipoproteinChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Hormon và Chuyển Hóa Mỡ</h3>
+                    <p class="text-center text-gray-600 mb-4">Chuyển hóa mỡ được điều hòa chặt chẽ: Insulin thúc đẩy dự trữ mỡ, trong khi các hormon như Adrenalin, Cortisol huy động mỡ để tạo năng lượng khi cần.</p>
+                    <div class="chart-container">
+                        <canvas id="lipidHormoneChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="protein" class="py-12 reveal">
+            <h2 class="section-header">III. Chuyển Hóa Protein</h2>
+            <p class="max-w-3xl mx-auto text-lg text-center text-gray-600 mb-12">
+                Protein là "viên gạch" xây dựng nên cơ thể, không có dạng dự trữ chuyên biệt. Vai trò chính là cấu trúc và chức năng, từ cơ bắp đến enzyme và kháng thể.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Chức Năng Của Protein Huyết Tương</h3>
+                    <p class="text-center text-gray-600 mb-4">Gan tổng hợp các protein huyết tương quan trọng. Albumin giữ nước trong lòng mạch, thiếu hụt sẽ gây phù. Globulin là kháng thể miễn dịch, Fibrinogen tham gia đông máu.</p>
+                    <div class="chart-container">
+                        <canvas id="proteinFunctionsChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Cân Bằng Nitơ (Bilan Nitơ)</h3>
+                    <p class="text-center text-gray-600 mb-4">Trạng thái chuyển hóa protein được phản ánh qua bilan nitơ. Bilan dương (tổng hợp > thoái hóa) gặp ở trẻ em, người mang thai. Bilan âm (thoái hóa > tổng hợp) gặp ở người suy dinh dưỡng, stress nặng.</p>
+                    <div class="flex items-center justify-around h-full mt-6">
+                        <div class="text-center">
+                            <p class="text-6xl">➕</p>
+                            <p class="text-xl font-bold text-green-600 mt-2">Bilan Nitơ Dương</p>
+                            <p class="text-gray-600">Cơ thể phát triển, xây dựng</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-6xl">➖</p>
+                            <p class="text-xl font-bold text-red-600 mt-2">Bilan Nitơ Âm</p>
+                            <p class="text-gray-600">Suy kiệt, stress, bệnh tật</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="energy" class="py-12 bg-[#e0f2fe] reveal">
+            <h2 class="section-header">IV. Chuyển Hóa Năng Lượng</h2>
+            <p class="max-w-3xl mx-auto text-lg text-center text-gray-600 mb-12">
+                Năng lượng không tự sinh ra, chỉ chuyển từ hóa năng của thức ăn thành các dạng khác. Cân bằng giữa năng lượng nạp vào và tiêu hao quyết định cân nặng và sức khỏe tổng thể.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Các Yếu Tố Tiêu Hao Năng Lượng</h3>
+                    <p class="text-center text-gray-600 mb-4">Phần lớn năng lượng tiêu hao hàng ngày dành cho Chuyển hóa cơ sở (BMR) - năng lượng duy trì sự sống. Hoạt động thể chất và tiêu hóa thức ăn (SDA) chiếm phần còn lại.</p>
+                    <div class="chart-container">
+                        <canvas id="energyExpenditureChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Tác Dụng Động Lực Đặc Hiệu (SDA)</h3>
+                    <p class="text-center text-gray-600 mb-4">Cơ thể tốn năng lượng để chuyển hóa thức ăn. Protein có SDA cao nhất (30%), nghĩa là ăn protein "tốn" nhiều calo nhất để xử lý.</p>
+                    <div class="chart-container">
+                        <canvas id="sdaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="py-12 reveal">
+            <h2 class="section-header">V. Trắc Nghiệm Lâm Sàng</h2>
+            <p class="max-w-3xl mx-auto text-lg text-center text-gray-600 mb-12">
+                Hãy áp dụng kiến thức của bạn để giải quyết các tình huống lâm sàng thực tế được trích từ ngân hàng câu hỏi.
+            </p>
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                <div id="quiz-container">
+                </div>
+            </div>
+        </section>
+        
+        <section id="gemini-advisor" class="py-16 px-4 md:px-8 bg-green-50 reveal">
+            <h2 class="section-header">✨ Thực Đơn Mẫu Tham Khảo</h2>
+            <p class="max-w-3xl mx-auto text-lg text-center text-gray-600 mb-12">
+                Đây là một kế hoạch bữa ăn mẫu, được xây dựng dựa trên các nguyên tắc chuyển hóa cho một người nam giới trưởng thành, hoạt động thể chất vừa phải, với mục tiêu duy trì cân nặng.
+            </p>
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-center mb-4">Thực Đơn Gợi Ý (~2300 Kcal)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-lg text-[#0077b6]">Bữa Sáng (~500 kcal)</h4>
+                        <p class="mt-2">1 tô phở bò tái (bánh phở, thịt bò, nước dùng, rau thơm). Cung cấp đủ tinh bột, đạm và khởi đầu ngày mới.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-lg text-[#0077b6]">Bữa Trưa (~650 kcal)</h4>
+                        <p class="mt-2">Cơm trắng (2 chén), thịt kho trứng (1-2 quả trứng, thịt ba chỉ), canh bí đao nấu tôm, dưa chuột.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-lg text-[#0077b6]">Bữa Phụ Chiều (~250 kcal)</h4>
+                        <p class="mt-2">1 hộp sữa chua không đường và 1 quả chuối. Cung cấp protein, canxi và kali, tốt cho phục hồi cơ bắp.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-lg text-[#0077b6]">Bữa Tối (~600 kcal)</h4>
+                        <p class="mt-2">Cơm trắng (1.5 chén), ức gà luộc xé phay (150g), salad rau xanh với dầu giấm, canh rau ngót nấu thịt bằm.</p>
+                    </div>
+                </div>
+                <div class="mt-6 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-lg">
+                    <p class="font-bold">Lời khuyên:</p>
+                    <p>Kế hoạch này cung cấp đủ năng lượng và cân bằng các nhóm chất đa lượng để duy trì cân nặng và hỗ trợ tập luyện. Hãy nhớ uống đủ 2-3 lít nước mỗi ngày. Bạn có thể thay đổi các món ăn có giá trị dinh dưỡng tương đương để thực đơn thêm phong phú.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gradient-to-r from-[#03045e] to-[#0077b6] text-white text-center py-8 px-4 mt-8">
+        <p class="font-semibold">Dữ liệu được biên soạn dựa trên ngân hàng câu hỏi Sinh lý Chuyển hóa - Đại học Y Hà Nội.</p>
+        <p class="text-sm opacity-80 mt-2">Infographic được tạo ra cho mục đích giáo dục.</p>
+    </footer>
+
+    <script>
+        const chartColors = {
+            blue1: '#00b4d8',
+            blue2: '#0077b6',
+            blue3: '#03045e',
+            yellow: '#ffc300',
+            red: '#c70039',
+            lightGray: '#e9ecef',
+            darkGray: '#495057'
+        };
+
+        const commonTooltipCallback = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            return Array.isArray(label) ? label.join(' ') : label;
+                        }
+                    }
+                }
+            }
+        };
+
+        new Chart(document.getElementById('glucoseRegulationChart'), {
+            type: 'line',
+            data: { labels: ['Lúc đói', 'Sau ăn 1h', 'Sau ăn 2h'], datasets: [{ label: 'Glucose máu (mg/dl)', data: [90, 130, 100], borderColor: chartColors.blue2, backgroundColor: 'rgba(0, 119, 182, 0.1)', fill: true, tension: 0.4 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { ...commonTooltipCallback.plugins } }
+        });
+        new Chart(document.getElementById('liverRoleChart'), {
+            type: 'bar',
+            data: { labels: ['Dự trữ Glycogen', 'Tân tạo Glucose', 'Giải phóng Glucose'], datasets: [{ label: 'Vai trò của Gan', data: [100, 85, 95], backgroundColor: [chartColors.blue1, chartColors.blue2, chartColors.yellow] }] },
+            options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { ...commonTooltipCallback.plugins, legend: { display: false } } }
+        });
+        new Chart(document.getElementById('lipoproteinChart'), {
+            type: 'bar',
+            data: { labels: ['VLDL', 'LDL ("Xấu")', 'HDL ("Tốt")'], datasets: [{ label: 'Triglycerid', data: [60, 10, 5], backgroundColor: chartColors.yellow }, { label: 'Cholesterol', data: [20, 50, 20], backgroundColor: chartColors.red }, { label: 'Protein', data: [10, 20, 50], backgroundColor: chartColors.blue3 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true, title: { display: true, text: 'Thành phần %' } } }, plugins: { ...commonTooltipCallback.plugins } }
+        });
+        new Chart(document.getElementById('lipidHormoneChart'), {
+            type: 'bar',
+            data: { labels: ['Tăng dự trữ mỡ', 'Tăng thoái hóa mỡ'], datasets: [{ label: 'Tác dụng của Hormon', data: [100, -100], backgroundColor: (context) => context.raw > 0 ? chartColors.blue2 : chartColors.red }] },
+            options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { ...commonTooltipCallback.plugins, legend: { display: false }, tooltip: { callbacks: { label: function(context) { if (context.label === 'Tăng dự trữ mỡ') return 'Hormon chính: Insulin'; if (context.label === 'Tăng thoái hóa mỡ') return 'Hormon chính: Adrenalin, Cortisol, Glucagon'; return ''; } } } } }
+        });
+        new Chart(document.getElementById('proteinFunctionsChart'), {
+            type: 'pie',
+            data: { labels: ['Tạo áp suất keo (Albumin)', 'Miễn dịch (Globulin)', 'Đông máu (Fibrinogen)'], datasets: [{ data: [60, 25, 7], backgroundColor: [chartColors.blue1, chartColors.blue2, chartColors.yellow] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { ...commonTooltipCallback.plugins, legend: { position: 'bottom' } } }
+        });
+        new Chart(document.getElementById('energyExpenditureChart'), {
+            type: 'doughnut',
+            data: { labels: ['Chuyển hóa cơ sở (BMR)', 'Hoạt động thể chất', 'Tiêu hóa (SDA)'], datasets: [{ data: [70, 20, 10], backgroundColor: [chartColors.blue3, chartColors.blue1, chartColors.yellow], borderColor: '#ffffff', borderWidth: 4 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { ...commonTooltipCallback.plugins, legend: { position: 'bottom' } } }
+        });
+        new Chart(document.getElementById('sdaChart'), {
+            type: 'bar',
+            data: { labels: ['Protein', 'Lipid', 'Glucid'], datasets: [{ label: 'Năng lượng tiêu hao để chuyển hóa (%)', data: [30, 14, 6], backgroundColor: [chartColors.red, chartColors.yellow, chartColors.blue1] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { ...commonTooltipCallback.plugins, legend: { display: false } } }
+        });
+
+        const quizData = [
+            { question: "Một bệnh nhân nam 25 tuổi, được chẩn đoán đái tháo đường type 1, đã tiêm một liều insulin quá cao. Vài giờ sau, anh ta cảm thấy đói lả, vã mồ hôi và tim đập nhanh. Tình trạng của bệnh nhân là gì?", options: ["Tăng đường huyết", "Hạ đường huyết", "Nhiễm toan ceton", "Hôn mê tăng áp lực thẩm thấu"], correctAnswer: 1, explanation: "Các triệu chứng đói, vã mồ hôi và tim đập nhanh là những biểu hiện kinh điển của hạ đường huyết. Nguyên nhân là do liều insulin quá cao đã đưa quá nhiều glucose từ máu vào tế bào, làm nồng độ glucose máu giảm xuống dưới mức bình thường.", deeperExplanation: "Hãy tưởng tượng glucose trong máu giống như xăng trong bình của một chiếc xe hơi, và insulin là chiếc chìa khóa để mở nắp bình xăng cho động cơ (tế bào) sử dụng. Khi bệnh nhân đái tháo đường type 1 tiêm insulin, họ đang 'tra chìa khóa vào ổ'. Nếu tiêm quá nhiều insulin so với lượng 'xăng' nạp vào từ bữa ăn, chiếc chìa khóa này sẽ mở nắp bình xăng quá mạnh mẽ, làm cho toàn bộ xăng bị hút vào động cơ một cách ồ ạt. Kết quả là bình xăng (máu) gần như cạn kiệt. Cơ thể, đặc biệt là não bộ, bị 'đói xăng' đột ngột. Để báo động, hệ thần kinh giao cảm sẽ được kích hoạt, gây ra các triệu chứng như tim đập nhanh (cố gắng bơm ít xăng còn lại đi nhanh hơn), vã mồ hôi, và cảm giác đói cồn cào (cơ thể đang gào thét đòi nạp thêm nhiên liệu)." },
+            { question: "Một bệnh nhân bị xơ gan nặng, có biểu hiện phù toàn thân và bụng chướng to (cổ trướng). Nguyên nhân chính gây phù ở bệnh nhân này là do gan giảm tổng hợp protein nào?", options: ["Fibrinogen", "Globulin", "Albumin", "Hemoglobin"], correctAnswer: 2, explanation: "Gan là nơi duy nhất tổng hợp albumin. Trong xơ gan, chức năng gan suy giảm, dẫn đến giảm sản xuất albumin. Nồng độ albumin trong máu giảm làm giảm áp suất keo của huyết tương, khiến nước thoát ra khoảng kẽ gây phù.", deeperExplanation: "Hãy hình dung albumin trong máu như những miếng bọt biển nhỏ li ti, có nhiệm vụ hút và giữ nước ở trong lòng các 'đường ống' (mạch máu). Gan là nhà máy duy nhất sản xuất ra những miếng bọt biển này. Khi bị xơ gan, nhà máy này bị hư hỏng nặng và không sản xuất đủ albumin. Hậu quả là số lượng 'bọt biển' trong mạch máu giảm đi, khả năng giữ nước cũng giảm theo. Nước sẽ không còn được giữ chặt trong lòng ống mà bị rò rỉ ra các khu vực xung quanh, giống như nước thấm qua một đường ống bị thủng. Khi nước ứ đọng ở các mô kẽ dưới da, ta gọi là phù. Khi nó ứ đọng trong khoang bụng, ta gọi là cổ trướng." },
+            { question: "Một người đàn ông 50 tuổi, có thói quen ăn nhiều đồ chiên rán, nội tạng động vật. Kết quả xét nghiệm máu cho thấy nồng độ LDL-cholesterol rất cao. Ông có nguy cơ cao mắc bệnh gì nhất?", options: ["Bệnh Gout", "Bệnh xơ vữa động mạch", "Bệnh loãng xương", "Bệnh suy thận mạn"], correctAnswer: 1, explanation: "Lối sống và chế độ ăn nhiều chất béo bão hòa cùng với kết quả LDL-cholesterol cao là những yếu tố nguy cơ hàng đầu của bệnh xơ vữa động mạch. LDL-cholesterol cao thúc đẩy sự hình thành các mảng xơ vữa trong lòng động mạch.", deeperExplanation: "Hãy coi các mạch máu như những con đường cao tốc sạch sẽ, và các hạt LDL-cholesterol là những chiếc 'xe tải chở mỡ'. Khi số lượng xe tải ở mức vừa phải, chúng hoàn thành tốt nhiệm vụ giao mỡ đến các 'nhà máy' (tế bào). Tuy nhiên, khi nồng độ LDL tăng quá cao, số lượng 'xe tải' trở nên quá đông đúc. Một số chiếc bị 'hỏng' (bị oxy hóa) và đâm vào 'lề đường' (thành mạch). Vụ tai nạn này gây ra phản ứng viêm, các tế bào miễn dịch đến 'dọn dẹp' bằng cách ăn các LDL hỏng, nhưng chúng ăn quá nhiều và biến thành các tế bào bọt, chết tại chỗ. Xác của chúng cùng với mỡ tạo thành một 'đống đổ nát' ngày càng lớn, chính là mảng xơ vữa, làm hẹp lòng đường cao tốc." },
+            { question: "Chất dinh dưỡng nào có tác dụng động lực đặc hiệu (SDA) cao nhất, nghĩa là cơ thể tốn nhiều năng lượng nhất để chuyển hóa nó?", options: ["Glucid", "Lipid", "Protein", "Cả ba như nhau"], correctAnswer: 2, explanation: "Protein có SDA cao nhất (30%). Điều này là do quá trình chuyển hóa acid amin (khử amin, tổng hợp ure...) đòi hỏi nhiều năng lượng hơn so với chuyển hóa glucid (6%) và lipid (14%).", deeperExplanation: "Hãy tưởng tượng việc chuyển hóa thức ăn giống như việc lắp ráp đồ nội thất. Glucid và lipid giống như những bộ bàn ghế đơn giản, lắp ráp rất nhanh và ít tốn công. Ngược lại, protein giống như một chiếc tủ kệ phức tạp với hàng trăm loại ốc vít khác nhau (20 loại acid amin). Để 'tháo dỡ' protein lấy năng lượng, cơ thể phải tốn rất nhiều công sức, đặc biệt là phải xử lý phần 'khung thừa' chứa nitơ độc hại. Cơ thể phải tiêu tốn thêm năng lượng để biến đổi phần nitơ này thành ure ở gan trước khi thải ra ngoài. Chính công đoạn xử lý nitơ phức tạp này làm cho chi phí năng lượng (SDA) của protein cao vượt trội." }
+        ];
+
+        const quizContainerEl = document.getElementById('quiz-container');
+
+        function loadAllQuizzes() {
+            quizData.forEach((quiz, index) => {
+                const quizBlock = document.createElement('div');
+                quizBlock.classList.add('mb-8');
+
+                const questionTextEl = document.createElement('h3');
+                questionTextEl.classList.add('text-xl', 'font-bold', 'mb-6');
+                questionTextEl.textContent = `Câu hỏi ${index + 1}: ${quiz.question}`;
+                quizBlock.appendChild(questionTextEl);
+
+                const optionsContainerEl = document.createElement('div');
+                quiz.options.forEach((option, optionIndex) => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.classList.add('quiz-option');
+                    button.dataset.quizIndex = index;
+                    button.dataset.optionIndex = optionIndex;
+                    button.addEventListener('click', handleOptionClick);
+                    optionsContainerEl.appendChild(button);
+                });
+                quizBlock.appendChild(optionsContainerEl);
+
+                const explanationContainerEl = document.createElement('div');
+                explanationContainerEl.id = `explanation-${index}`;
+                explanationContainerEl.classList.add('hidden', 'mt-4');
+                quizBlock.appendChild(explanationContainerEl);
+
+                quizContainerEl.appendChild(quizBlock);
+            });
+        }
+
+        function handleOptionClick(event) {
+            const selectedOption = event.target;
+            const quizIndex = parseInt(selectedOption.dataset.quizIndex);
+            const selectedAnswerIndex = parseInt(selectedOption.dataset.optionIndex);
+            const currentQuestion = quizData[quizIndex];
+            
+            const parentBlock = selectedOption.parentElement.parentElement;
+            const allOptions = parentBlock.querySelectorAll('.quiz-option');
+
+            allOptions.forEach(option => {
+                option.classList.add('disabled');
+                const optionIndex = parseInt(option.dataset.optionIndex);
+                if (optionIndex === currentQuestion.correctAnswer) {
+                    option.classList.add('correct');
+                }
+            });
+
+            if (selectedAnswerIndex !== currentQuestion.correctAnswer) {
+                selectedOption.classList.add('incorrect');
+            }
+
+            const explanationContainerEl = parentBlock.querySelector(`#explanation-${quizIndex}`);
+            explanationContainerEl.innerHTML = `<div class="explanation"><p class="font-bold">Giải thích:</p><p>${currentQuestion.explanation}</p><button class="static-gemini-button text-sm mt-4" data-quiz-index="${quizIndex}">✨ Xem giải thích sâu hơn</button></div>`;
+            explanationContainerEl.classList.remove('hidden');
+            
+            explanationContainerEl.querySelector('button').addEventListener('click', (e) => {
+                const deeperExplanationDiv = document.createElement('div');
+                deeperExplanationDiv.classList.add('deeper-explanation', 'mt-4');
+                deeperExplanationDiv.innerHTML = `<p class="font-bold text-[#0077b6]">Giải thích sâu hơn:</p><p>${currentQuestion.deeperExplanation}</p>`;
+                explanationContainerEl.appendChild(deeperExplanationDiv);
+                e.target.style.display = 'none';
+            });
+        }
+        
+        window.addEventListener('load', loadAllQuizzes);
+
+        // Scroll Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Initial check
+    </script>
+</body>
+</html>
